@@ -1,0 +1,42 @@
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.2.50"
+    id "org.jetbrains.kotlin.plugin.spring" version "1.2.50"
+    id "org.jetbrains.kotlin.plugin.jpa" version "1.2.50"
+    id "org.springframework.boot" version "2.0.3.RELEASE"
+}
+
+group = 'at.logic.sc.ss18.casino'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+compileKotlin {
+    kotlinOptions {
+        allWarningsAsErrors = true
+        freeCompilerArgs = ["-Xjsr305=strict"]
+        jvmTarget = "1.8"
+    }
+}
+
+compileTestKotlin {
+    kotlinOptions {
+        allWarningsAsErrors = true
+        freeCompilerArgs = ["-Xjsr305=strict"]
+        jvmTarget = "1.8"
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    implementation "org.springframework.boot:spring-boot-dependencies:2.0.3.RELEASE"
+
+    implementation "org.springframework.boot:spring-boot-starter"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "org.jetbrains.kotlin:kotlin-reflect"
+
+    implementation "org.web3j:web3j-spring-boot-starter:1.6.0"
+}

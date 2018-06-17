@@ -1,0 +1,12 @@
+{
+  "name": "casino-contract",
+  "version": "1.0.0",
+  "dependencies": {
+    "openzeppelin-solidity": "^1.10.0",
+    "solc": "^0.4.24",
+    "truffle": "^4.1.11"
+  },
+  "scripts": {
+    "truffle": "truffle"
+  }
+}

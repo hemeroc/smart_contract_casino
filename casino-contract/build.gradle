@@ -1,0 +1,21 @@
+plugins {
+    id "base"
+    id "de.solugo.gradle.nodejs" version "0.2.1"
+}
+
+nodejs {
+    version = '10.4.1'
+}
+
+clean {
+    delete "${projectDir}/node_modules"
+}
+
+task("truffleCompile", type: NodeJsTask) {
+    require = ["truffle"]
+    executable = "truffle"
+    args = ["compile"]
+}
+
+build.dependsOn npmInstall
+build.dependsOn truffleCompile
