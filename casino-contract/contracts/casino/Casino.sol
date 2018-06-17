@@ -10,6 +10,7 @@ import "./CasinoToken.sol";
 contract Casino is Superuser, ERC223Receiver {
 
     string public constant ROLE_ORACLE = "oracle";
+    string public constant CASINO_TOKEN_SUPPLY = "CASINO_TOKEN_SUPPLY";
 
     using SafeMath for uint;
 
@@ -21,6 +22,9 @@ contract Casino is Superuser, ERC223Receiver {
         casinoTokenPrice = _initialCasinoTokenPrice;
         addRole(msg.sender, ROLE_ORACLE);
     }
+
+    event CasinoTokensSupplied(uint256 _amount);
+    event OracleInformationReceived(uint256 _utcTimestamp, uint256 _price);
 
     // Casino Token
 
@@ -50,8 +54,14 @@ contract Casino is Superuser, ERC223Receiver {
 
     function tokenFallback(address _sender, address _origin, uint256 _value, bytes _data) public returns (bool success) {
         require(CasinoToken(msg.sender) == casinoTokenContract);
-        // TODO implement me
-        return true;
+        // check if token is supply
+        if (keccak256(_data) == keccak256(CASINO_TOKEN_SUPPLY)) {
+            require(_sender == owner || isSuperuser(_sender));
+            emit CasinoTokensSupplied(_value);
+            return true;
+        }
+        // TODO: check if token is sold and contract has enough funds to accept the token
+        return false;
     }
 
     // Payout
@@ -62,9 +72,14 @@ contract Casino is Superuser, ERC223Receiver {
 
     // Oracle
 
+    function setInformation(uint256 _utcTimestamp, uint256 _price) external onlyOracle {
+        emit OracleInformationReceived(_utcTimestamp, _price);
+    }
+
     modifier onlyOracle() {
         checkRole(msg.sender, ROLE_ORACLE);
         _;
     }
+
 
 }
