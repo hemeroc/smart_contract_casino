@@ -1,1 +1,2 @@
-web3j.client-address: http://localhost:7545
+web3j.networkAddress: http://localhost:7545/
+casino.address=

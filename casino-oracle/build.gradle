@@ -38,5 +38,9 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "org.jetbrains.kotlin:kotlin-reflect"
 
-    implementation "org.web3j:web3j-spring-boot-starter:1.6.0"
+    implementation ('org.yaml:snakeyaml:1.19') {
+        force = true
+    }
+
+    implementation "org.web3j:core:3.4.0"
 }
