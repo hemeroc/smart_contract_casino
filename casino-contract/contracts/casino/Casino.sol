@@ -9,6 +9,8 @@ import "./CasinoToken.sol";
 
 contract Casino is Superuser, ERC223Receiver {
 
+    string public constant ROLE_ORACLE = "oracle";
+
     using SafeMath for uint;
 
     CasinoToken internal casinoTokenContract;
@@ -17,6 +19,7 @@ contract Casino is Superuser, ERC223Receiver {
     constructor(uint256 _initialCasinoTokenPrice) public {
         require(_initialCasinoTokenPrice > 0);
         casinoTokenPrice = _initialCasinoTokenPrice;
+        addRole(msg.sender, ROLE_ORACLE);
     }
 
     // Casino Token
@@ -55,6 +58,13 @@ contract Casino is Superuser, ERC223Receiver {
 
     function payout(address _receiver, uint256 _amount) external onlyOwner {
         _receiver.transfer(_amount);
+    }
+
+    // Oracle
+
+    modifier onlyOracle() {
+        checkRole(msg.sender, ROLE_ORACLE);
+        _;
     }
 
 }
