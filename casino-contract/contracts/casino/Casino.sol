@@ -14,4 +14,8 @@ contract Casino is Superuser, ERC223Receiver {
 
     }
 
+    function tokenFallback(address _sender, address _origin, uint256 _value, bytes _data) public returns (bool success) {
+        return false;
+    }
+
 }
