@@ -1,5 +1,9 @@
 # Smart Contracts Casino
 
+## Author
+* Dominik Moser (e0726744)
+* Martin Prebio (e1025737)
+
 ## Build
 
 The project consists of three sub projects.  
