@@ -1,5 +1,6 @@
 var Casino = artifacts.require("./casino/Casino.sol");
 
 module.exports = function(deployer) {
-  deployer.deploy(Casino);
+    let initialBeerTokenPrice = web3.toWei(1, 'ether');
+    deployer.deploy(Casino, initialBeerTokenPrice);
 };
