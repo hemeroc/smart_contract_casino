@@ -1,28 +1,28 @@
 plugins {
     id "base"
-    id "de.solugo.gradle.nodejs" version "0.2.1"
+    id "com.moowork.node" version "1.2.0"
 }
 
-nodejs {
+node {
     version = '10.4.1'
+    npmVersion = '6.1.0'
+    distBaseUrl = 'https://nodejs.org/dist'
+    download = true
+    workDir = file("${project.buildDir}/nodejs")
+    nodeModulesDir = file("${project.projectDir}")
 }
 
 clean {
-    delete "${projectDir}/node_modules"
+    delete "${project.projectDir}/build"
+    delete "${project.projectDir}/node_modules"
 }
 
-task("truffleCompile", type: NodeJsTask) {
-    workingDir "$projectDir"
-    require = ["truffle"]
-    executable = "truffle"
-    args = ["compile"]
+task truffleCompile(type: NpmTask) {
+    args = ['run', 'truffle', "compile"]
 }
 
-task("truffleMigrate", type: NodeJsTask) {
-    workingDir "$projectDir"
-    require = ["truffle"]
-    executable = "truffle"
-    args = ["migrate", "--network", "development"]
+task truffleMigrate(type: NpmTask) {
+    args = ['run', 'truffle', "migrate", "--network", "development"]
 }
 
 truffleCompile.dependsOn npmInstall
