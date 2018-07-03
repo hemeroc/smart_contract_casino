@@ -9,15 +9,7 @@ group = 'at.logic.sc.ss18.casino'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
-compileKotlin {
-    kotlinOptions {
-        allWarningsAsErrors = true
-        freeCompilerArgs = ["-Xjsr305=strict"]
-        jvmTarget = "1.8"
-    }
-}
-
-compileTestKotlin {
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     kotlinOptions {
         allWarningsAsErrors = true
         freeCompilerArgs = ["-Xjsr305=strict"]
@@ -29,18 +21,29 @@ repositories {
     mavenCentral()
 }
 
+configurations.all {
+    resolutionStrategy {
+        failOnVersionConflict()
+        preferProjectModules()
+        forcedModules = [
+                "org.jetbrains.kotlin:kotlin-stdlib:1.2.50",
+                "org.jetbrains.kotlin:kotlin-reflect:1.2.50",
+                "org.yaml:snakeyaml:1.19"
+        ]
+    }
+    exclude module: "log4j"
+}
 
 dependencies {
     implementation "org.springframework.boot:spring-boot-dependencies:2.0.3.RELEASE"
+    implementation "org.springframework.cloud:spring-cloud-dependencies:Finchley.RELEASE"
 
     implementation "org.springframework.boot:spring-boot-starter"
-    implementation "com.fasterxml.jackson.module:jackson-module-kotlin"
+    implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "org.jetbrains.kotlin:kotlin-reflect"
-
-    implementation ('org.yaml:snakeyaml:1.19') {
-        force = true
-    }
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin"
 
     implementation "org.web3j:core:3.4.0"
 }
