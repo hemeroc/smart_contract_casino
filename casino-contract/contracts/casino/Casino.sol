@@ -12,6 +12,9 @@ contract Casino is Superuser, ERC223Receiver {
     string public constant ROLE_ORACLE = "oracle";
     string public constant CASINO_TOKEN_SUPPLY = "CASINO_TOKEN_SUPPLY";
 
+    uint256 private constant MIN_BET_TIMESTAMP_IN_FUTURE = 60 * 25; // 15 Minutes in Seconds
+    uint256 private constant MAX_BET_TIMESTAMP_IN_FUTURE = 60 * 60; // 60 Minutes in Seconds
+
     using SafeMath for uint;
 
     CasinoToken internal casinoTokenContract;
@@ -24,7 +27,8 @@ contract Casino is Superuser, ERC223Receiver {
     }
 
     event CasinoTokensSupplied(uint256 _amount);
-    event OracleInformationReceived(uint256 _utcTimestamp, uint256 _price);
+    event OracleInformationReceived(uint256 _timestamp, uint256 _price);
+    event BetPlaced(address _address, uint256 _betPlacedTimestamp, uint256 _betTimestamp, bool _rise);
 
     // Casino Token
 
@@ -60,8 +64,34 @@ contract Casino is Superuser, ERC223Receiver {
             emit CasinoTokensSupplied(_value);
             return true;
         }
-        // TODO: check if token is sold and contract has enough funds to accept the token
+        // TODO: add tokens from user to his balance
+        // TODO: add a possibility to sell tokens
         return false;
+    }
+
+    function getCasinoTokenBalance() external view returns (uint256) {
+        // TODO: return the users casino token balance
+        return 0;
+    }
+
+    // Bet placement
+
+    function placeBet(uint256 _amount, uint256 _betTimestamp, bool _rise) {
+        require(_amount >= 10);
+        require(_betTimestamp >= block.timestamp + MIN_BET_TIMESTAMP_IN_FUTURE);
+        require(_betTimestamp <= block.timestamp + MAX_BET_TIMESTAMP_IN_FUTURE);
+        // TODO:
+        // - check if the user has given amount of tokens
+        // - remove given amount of tokens from user balance
+        // - store bet placement
+        emit BetPlaced(msg.sender, block.timestamp, _betTimestamp, _rise);
+    }
+
+    function closeFinishedBets() {
+        // TODO:
+        // - close all finished bets of the user
+        // - close all overdue bets
+        // - transfer resulting tokens to user
     }
 
     // Payout
@@ -72,14 +102,14 @@ contract Casino is Superuser, ERC223Receiver {
 
     // Oracle
 
-    function setInformation(uint256 _utcTimestamp, uint256 _price) external onlyOracle {
-        emit OracleInformationReceived(_utcTimestamp, _price);
+    function setInformation(uint256 _timestamp, uint256 _price) external onlyOracle {
+        // TODO: store oracle information mapping from timestamp to price
+        emit OracleInformationReceived(_timestamp, _price);
     }
 
     modifier onlyOracle() {
         checkRole(msg.sender, ROLE_ORACLE);
         _;
     }
-
 
 }
