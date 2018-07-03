@@ -15,3 +15,10 @@
 .App-intro {
   font-size: large;
 }
+
+.MuiPaper-root-2 {
+  max-width: 400px;
+  margin: 5px;
+  display: inline-block;
+  min-height: 200px;
+}

@@ -6,6 +6,7 @@ import MenuItem from "@material-ui/core/es/MenuItem/MenuItem";
 import Web3 from 'web3';
 import FormControl from "@material-ui/core/es/FormControl/FormControl";
 import InputLabel from "@material-ui/core/es/InputLabel/InputLabel";
+import CardContent from "@material-ui/core/es/CardContent/CardContent";
 
 export default class Web3ClientCard extends Component {
 
@@ -35,29 +36,32 @@ export default class Web3ClientCard extends Component {
 
         return (
             <Card>
-                <Typography variant="headline" component="h3">
-                    Ethereum Client Configuration
-                </Typography>
+                <CardContent>
 
-                <FormControl>
-                    <InputLabel htmlFor="account-id">Active Account</InputLabel>
-                    <Select
-                        value={this.state.account}
-                        onChange={this.handleAccountChange}
-                        inputProps={{
-                            name: 'account',
-                            id: 'account-id',
-                        }}
-                    >
-                        <MenuItem value=""> <em>None</em> </MenuItem>
-                        {accountEntries}
-                    </Select>
-                </FormControl>
+                    <Typography variant="headline" component="h3">
+                        Ethereum Client Configuration
+                    </Typography>
 
-                <Typography component="p">
-                    Balance: {this.web3.utils.fromWei(this.state.balance, 'ether')} Eth
-                </Typography>
+                    <FormControl>
+                        <InputLabel htmlFor="account-id">Active Account</InputLabel>
+                        <Select
+                            value={this.state.account}
+                            onChange={this.handleAccountChange}
+                            inputProps={{
+                                name: 'account',
+                                id: 'account-id',
+                            }}
+                            style={{'min-width': "160px"}}
+                        >
+                            <MenuItem value=""> <em>None</em> </MenuItem>
+                            {accountEntries}
+                        </Select>
+                    </FormControl>
 
+                    <Typography component="p">
+                        Balance: {this.web3.utils.fromWei(this.state.balance, 'ether')} Eth
+                    </Typography>
+                </CardContent>
             </Card>
         );
     }

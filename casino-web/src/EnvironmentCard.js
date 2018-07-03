@@ -3,6 +3,7 @@ import TextField from '@material-ui/core/TextField';
 import * as web3 from "web3";
 import Typography from "@material-ui/core/es/Typography/Typography";
 import Card from "@material-ui/core/es/Card/Card";
+import CardContent from "@material-ui/core/es/CardContent/CardContent";
 
 
 export default class EnvironmentCard extends Component {
@@ -26,20 +27,22 @@ export default class EnvironmentCard extends Component {
     render() {
         return (
             <Card>
-                <Typography variant="headline" component="h3">
-                    Environment Settings
-                </Typography>
-                <Typography component="p">
-                    Please adapt the following settings according to truffle's migration output.
-                </Typography>
+                <CardContent>
+                    <Typography variant="headline" component="h3">
+                        Environment Settings
+                    </Typography>
+                    <Typography component="p">
+                        Please adapt the following settings according to truffle's migration output.
+                    </Typography>
 
-                <TextField id="casinoAddress"
-                           label="Casino Address"
-                           required
-                           value={this.state.casinoAddress}
-                           error={!this.state.validCasinoAddress}
-                           onChange={this.handleCasinoAddressChange}
-                />
+                    <TextField id="casinoAddress"
+                               label="Casino Address"
+                               required
+                               value={this.state.casinoAddress}
+                               error={!this.state.validCasinoAddress}
+                               onChange={this.handleCasinoAddressChange}
+                    />
+                </CardContent>
             </Card>
         );
     }
