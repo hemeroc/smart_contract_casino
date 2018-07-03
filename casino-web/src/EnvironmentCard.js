@@ -7,6 +7,9 @@ import CardContent from "@material-ui/core/es/CardContent/CardContent";
 
 
 export default class EnvironmentCard extends Component {
+
+    CASINO_STORAGE_KEY = "casino-token";
+
     constructor(props) {
         super(props);
 

@@ -7,10 +7,9 @@ import Actions from "./Actions";
 import EnvironmentCard from "./EnvironmentCard";
 import Web3ClientCard from "./Web3ClientCard";
 import TokenCard from "./TokenCard";
+import CasinoCard from "./CasinoCard";
 
 export default class App extends Component {
-
-    CASINO_STORAGE_KEY = "casino-token";
 
     constructor(props) {
         super(props);
@@ -57,10 +56,13 @@ export default class App extends Component {
             <div className="App">
                 <Header/>
                 <ChartBlock/>
-                <Web3ClientCard accountChangeCallback={this.accountChangeHandler} account={this.state.account} />
-                <EnvironmentCard casinoChangeCallback={this.casinoChangeHandler} />
+                <Web3ClientCard accountChangeCallback={this.accountChangeHandler} account={this.state.account}/>
+                <EnvironmentCard casinoChangeCallback={this.casinoChangeHandler}/>
                 <TokenCard account={this.state.account}
                            casinoAddress={this.state.casinoAddress}
+                />
+                <CasinoCard account={this.state.account}
+                            casinoAddress={this.state.casinoAddress}
                 />
                 <Actions/>
             </div>

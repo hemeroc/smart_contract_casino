@@ -17,8 +17,13 @@
 }
 
 .MuiPaper-root-2 {
-  max-width: 400px;
+  min-width: 250px;
+  max-width: 500px;
   margin: 5px;
   display: inline-block;
   min-height: 200px;
+}
+
+hr {
+  margin: 10px !important;
 }

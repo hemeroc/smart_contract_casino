@@ -32,7 +32,6 @@ export default class TokenCard extends Component {
         this.ensureUpToDateContracts();
     }
 
-
     componentDidUpdate(props, state, snapshot) {
         if (props.account !== this.props.account) {
             this.transferSubscription.unsubscribe();
