@@ -76,11 +76,13 @@ contract Casino is Superuser, ERC223Receiver {
 
     // Bet placement
 
-    function placeBet(uint256 _amount, uint256 _betTimestamp, bool _rise) {
+    function placeBet(uint256 _amount, bool _rise) {
         require(_amount >= 10);
-        require(_betTimestamp >= block.timestamp + MIN_BET_TIMESTAMP_IN_FUTURE);
-        require(_betTimestamp <= block.timestamp + MAX_BET_TIMESTAMP_IN_FUTURE);
+        uint _betTimestamp = 123;
+//        require(_betTimestamp >= block.timestamp + MIN_BET_TIMESTAMP_IN_FUTURE);
+//        require(_betTimestamp <= block.timestamp + MAX_BET_TIMESTAMP_IN_FUTURE);
         // TODO:
+        // - Set _betTimestamp
         // - check if the user has given amount of tokens
         // - remove given amount of tokens from user balance
         // - store bet placement
