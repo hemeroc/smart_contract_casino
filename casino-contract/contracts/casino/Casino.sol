@@ -30,7 +30,9 @@ contract Casino is Superuser, ERC223Receiver {
     }
 
     event CasinoTokensSupplied(uint _amount);
-    event OracleInformationReceived(uint256 _timestamp, uint _price);
+
+    event OracleInformationStored(uint256 _timestamp, uint _price);
+    event OracleInformationDiscarded(uint256 _timestamp, uint _storedPrice, uint _oraclePrice);
 
     event TokenSold(address _address, uint _amount);
     event TokenAdded(address _address, uint _oldTokenBalance, uint _newTokenBalance);
@@ -120,8 +122,13 @@ contract Casino is Superuser, ERC223Receiver {
     // Oracle
 
     function setInformation(uint256 _timestamp, uint _price) external onlyOracle {
+        uint currentPriceInformation = priceInformation[_timestamp];
+        if (currentPriceInformation != 0) {
+            emit OracleInformationDiscarded(_timestamp, currentPriceInformation, _price);
+            return;
+        }
         priceInformation[_timestamp] = _price;
-        emit OracleInformationReceived(_timestamp, _price);
+        emit OracleInformationStored(_timestamp, _price);
     }
 
     modifier onlyOracle() {
