@@ -1,5 +1,7 @@
-web3j:
-  networkAddress: http://localhost:7545/
-  accountAddress: "0x77F688b2D9e0B8A3D5AA8b169D75afE34f65430B"
-casino:
-  address: "0xd6955cd4745bfeed8bca343f17176d9d2ebbfdd4"
+logging:
+  level:
+    root: ERROR
+    at.logic.sc.ss18.casino: INFO
+spring:
+  profiles:
+    active: development

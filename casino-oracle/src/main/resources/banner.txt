@@ -1,0 +1,21 @@
+
+                   sh                   
+                  o+dh
+                 o++ddd
+               so+++dddd                 ___ _   _            _
+              s+++++dddddh              | __| |_| |_  ___ _ _(_)_  _ _ __
+             s++++++ddddddh             | _||  _| ' \/ -_) '_| | || | '  \
+            o+++++++dddddddh            |___|\__|_||_\___|_| |_|\_,_|_|_|_|
+           o++++++osmdddddddd            / __|__ _ __(_)_ _  ___
+         so+++os hddNNNmmmdddd          | (__/ _` (_-< | ' \/ _ \
+        sos hdddddddNNNNNNNmmmdh         \___\__,_/__/_|_||_\___/
+         dddddddddddNNNNNNNNNNmd         / _ \ _ _ __ _ __| |___
+        ss hhdddddddNNNNNNNmdhh         | (_) | '_/ _` / _| / -_)
+         s+os hhddddNNNNdh hhdh          \___/|_| \__,_\__|_\___|
+          so++oos hdmdh hdddd
+            o+++++oshhdddddh
+             s++++++dddddd              :: powered by Spring Boot v${spring-boot.version} ::
+               o++++ddddh
+                s+++dddh                
+                 so+dd                  
+                   oh                   
