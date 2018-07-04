@@ -10,15 +10,18 @@ import "./CasinoToken.sol";
 contract Casino is Superuser, ERC223Receiver {
 
     string public constant ROLE_ORACLE = "oracle";
-    string public constant CASINO_TOKEN_SUPPLY = "CASINO_TOKEN_SUPPLY";
+    bytes32 public constant CASINO_TOKEN_SUPPLY = keccak256("CASINO_TOKEN_SUPPLY");
+    bytes32 public constant CASINO_TOKEN_SELL = keccak256("CASINO_TOKEN_SELL");
 
-    uint256 private constant MIN_BET_TIMESTAMP_IN_FUTURE = 60 * 25; // 15 Minutes in Seconds
-    uint256 private constant MAX_BET_TIMESTAMP_IN_FUTURE = 60 * 60; // 60 Minutes in Seconds
+    uint256 private constant BET_TIMESTAMP_IN_FUTURE = 30 * 60; // 30 Minutes in Seconds
 
     using SafeMath for uint;
 
     CasinoToken internal casinoTokenContract;
     uint256 internal casinoTokenPrice;
+
+    mapping(address => uint) tokenBalance;
+    mapping(uint256 => uint) priceInformation;
 
     constructor(uint256 _initialCasinoTokenPrice) public {
         require(_initialCasinoTokenPrice > 0);
@@ -26,9 +29,15 @@ contract Casino is Superuser, ERC223Receiver {
         addRole(msg.sender, ROLE_ORACLE);
     }
 
-    event CasinoTokensSupplied(uint256 _amount);
-    event OracleInformationReceived(uint256 _timestamp, uint256 _price);
+    event CasinoTokensSupplied(uint _amount);
+    event OracleInformationReceived(uint256 _timestamp, uint _price);
+
+    event TokenSold(address _address, uint _amount);
+    event TokenAdded(address _address, uint _oldTokenBalance, uint _newTokenBalance);
+
     event BetPlaced(address _address, uint256 _betPlacedTimestamp, uint256 _betTimestamp, bool _rise);
+    event BetLost(address _address, uint256 _betPlacedTimestamp, uint _initialPrice, uint256 _betTimestamp, uint _finalPrice);
+    event BetWon(address _address, uint256 _betPlacedTimestamp, uint _initialPrice, uint256 _betTimestamp, uint _finalPrice);
 
     // Casino Token
 
@@ -56,44 +65,50 @@ contract Casino is Superuser, ERC223Receiver {
         }
     }
 
-    function tokenFallback(address _sender, address _origin, uint256 _value, bytes _data) public returns (bool success) {
+    function tokenFallback(address _sender, address origin_, uint256 _value, bytes _data) public returns (bool success) {
+        origin_;
         require(CasinoToken(msg.sender) == casinoTokenContract);
+        bytes32 operation = keccak256(_data);
         // check if token is supply
-        if (keccak256(_data) == keccak256(CASINO_TOKEN_SUPPLY)) {
+        if (operation == CASINO_TOKEN_SUPPLY) {
             require(_sender == owner || isSuperuser(_sender));
             emit CasinoTokensSupplied(_value);
             return true;
         }
-        // TODO: add tokens from user to his balance
-        // TODO: add a possibility to sell tokens
-        return false;
+        // check if token is sold
+        if (operation == CASINO_TOKEN_SELL) {
+            _sender.transfer(_value * casinoTokenPrice);
+            emit TokenSold(_sender, _value);
+            return true;
+        }
+        // add token to senders balance
+        uint oldTokenBalance = tokenBalance[_sender];
+        uint newTokenBalance = oldTokenBalance.add(_value);
+        tokenBalance[_sender] = newTokenBalance;
+        emit TokenAdded(_sender, oldTokenBalance, newTokenBalance);
+        return true;
     }
 
     function getCasinoTokenBalance() external view returns (uint256) {
-        // TODO: return the users casino token balance
-        return 0;
+        return tokenBalance[msg.sender];
     }
 
     // Bet placement
 
-    function placeBet(uint256 _amount, bool _rise) {
+    function placeBet(uint256 _amount, bool _rise) external {
         require(_amount >= 10);
-        uint _betTimestamp = 123;
-//        require(_betTimestamp >= block.timestamp + MIN_BET_TIMESTAMP_IN_FUTURE);
-//        require(_betTimestamp <= block.timestamp + MAX_BET_TIMESTAMP_IN_FUTURE);
-        // TODO:
-        // - Set _betTimestamp
-        // - check if the user has given amount of tokens
-        // - remove given amount of tokens from user balance
-        // - store bet placement
+        tokenBalance[msg.sender] = tokenBalance[msg.sender].sub(_amount);
+        require(tokenBalance[msg.sender] >= 0);
+        uint _betTimestamp = block.timestamp + BET_TIMESTAMP_IN_FUTURE;
+        // TODO: store bet placement
         emit BetPlaced(msg.sender, block.timestamp, _betTimestamp, _rise);
     }
 
-    function closeFinishedBets() {
-        // TODO:
-        // - close all finished bets of the user
-        // - close all overdue bets
-        // - transfer resulting tokens to user
+    function closeFinishedBets() external {
+        // TODO: close all finished bets of the user
+        // TODO: close all overdue bets
+        // TODO: transfer resulting tokens to user
+        // TODO: emit BetLost and/or BetWon
     }
 
     // Payout
@@ -104,8 +119,8 @@ contract Casino is Superuser, ERC223Receiver {
 
     // Oracle
 
-    function setInformation(uint256 _timestamp, uint256 _price) external onlyOracle {
-        // TODO: store oracle information mapping from timestamp to price
+    function setInformation(uint256 _timestamp, uint _price) external onlyOracle {
+        priceInformation[_timestamp] = _price;
         emit OracleInformationReceived(_timestamp, _price);
     }
 
