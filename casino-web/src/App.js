@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import './App.css';
 import Web3 from 'web3';
 import Header from "./Header";
-import ChartBlock from "./ChartBlock";
 import Actions from "./Actions";
 import EnvironmentCard from "./EnvironmentCard";
 import Web3ClientCard from "./Web3ClientCard";
@@ -28,17 +27,7 @@ export default class App extends Component {
     }
 
     componentDidMount = async () => {
-        // TODO rewrite
-
-        const coinbase = await this.web3.eth.getCoinbase();
-        const balance = await this.web3.eth.getBalance(coinbase);
-
-        this.balanceSubscription = this.web3.eth.subscribe('newBlockHeaders', () => {
-            const balance = this.web3.eth.getBalance(coinbase);
-            this.setState({balance})
-        });
-
-        this.setState({loading: false, coinbase, balance})
+        this.setState({loading: false})
     };
 
     accountChangeHandler(account) {
