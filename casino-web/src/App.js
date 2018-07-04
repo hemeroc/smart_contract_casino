@@ -55,7 +55,7 @@ export default class App extends Component {
         return (
             <div className="App">
                 <Header/>
-                <ChartBlock/>
+                {/*<ChartBlock/>*/}
                 <Web3ClientCard accountChangeCallback={this.accountChangeHandler} account={this.state.account}/>
                 <EnvironmentCard casinoChangeCallback={this.casinoChangeHandler}/>
                 <TokenCard account={this.state.account}
