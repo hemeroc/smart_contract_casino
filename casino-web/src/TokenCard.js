@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import Typography from "@material-ui/core/es/Typography/Typography";
-import Card from "@material-ui/core/es/Card/Card";
+import Typography from "@material-ui/core/Typography/Typography";
+import Card from "@material-ui/core/Card/Card";
 import Web3 from 'web3';
-import TextField from "@material-ui/core/es/TextField/TextField";
-import CardContent from "@material-ui/core/es/CardContent/CardContent";
-import CardActions from "@material-ui/core/es/CardActions/CardActions";
-import Button from "@material-ui/core/es/Button/Button";
+import TextField from "@material-ui/core/TextField/TextField";
+import CardContent from "@material-ui/core/CardContent/CardContent";
+import CardActions from "@material-ui/core/CardActions/CardActions";
+import Button from "@material-ui/core/Button/Button";
 import casinoTokenDefinition from './abi/CasinoToken.json';
 import casinoDefinition from './abi/Casino.json';
 import {sameAddress} from "./helpers";

@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import Typography from "@material-ui/core/es/Typography/Typography";
-import Card from "@material-ui/core/es/Card/Card";
-import Select from "@material-ui/core/es/Select/Select";
-import MenuItem from "@material-ui/core/es/MenuItem/MenuItem";
+import Typography from "@material-ui/core/Typography/Typography";
+import Card from "@material-ui/core/Card/Card";
+import Select from "@material-ui/core/Select/Select";
+import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import Web3 from 'web3';
-import FormControl from "@material-ui/core/es/FormControl/FormControl";
-import InputLabel from "@material-ui/core/es/InputLabel/InputLabel";
-import CardContent from "@material-ui/core/es/CardContent/CardContent";
+import FormControl from "@material-ui/core/FormControl/FormControl";
+import InputLabel from "@material-ui/core/InputLabel/InputLabel";
+import CardContent from "@material-ui/core/CardContent/CardContent";
 
 export default class Web3ClientCard extends Component {
 

@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import TextField from '@material-ui/core/TextField';
 import * as web3 from "web3";
-import Typography from "@material-ui/core/es/Typography/Typography";
-import Card from "@material-ui/core/es/Card/Card";
-import CardContent from "@material-ui/core/es/CardContent/CardContent";
+import Typography from "@material-ui/core/Typography/Typography";
+import Card from "@material-ui/core/Card/Card";
+import CardContent from "@material-ui/core/CardContent/CardContent";
 
 
 export default class EnvironmentCard extends Component {
