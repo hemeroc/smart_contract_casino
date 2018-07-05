@@ -152,7 +152,9 @@ contract Casino is Superuser, ERC223Receiver {
         }
         uint tokensToTransfer = tokenBalance[msg.sender];
         tokenBalance[msg.sender] = 0;
-        casinoTokenContract.transfer(msg.sender, tokensToTransfer, "Thanks for playing 🍀");
+        if (tokensToTransfer > 0) {
+            casinoTokenContract.transfer(msg.sender, tokensToTransfer, "Thanks for playing 🍀");
+        }
     }
 
     // Payout
