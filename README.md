@@ -19,13 +19,16 @@ engineering :)
 ## Starting
 
 The applications require a running ethereum network. Best (and tested) way is to use Ganache.
-Additionally, Java is required. All other dependencies are loaded by gradle and npm.
+Additionally, Java 8+ is required. All other dependencies are loaded by gradle and npm.
 
 * Contract: `./gradlew :casino-contract:truffleMigrate`. This will compile and install the token and casino contract.
 Further, the last migration sets some sensible defaults like connection the token and casino and transfer an initial
 balance to it.
 * Oracle: `./gradlew :casino-oracle:bootRun`. Its actions can be watched on stdout.
 * Web: `/gradlew :casino-web:run`. It will be available on http://localhost:3000.
+
+Be aware that you may have to set the oracle/contract addresses in `application.yml`.
+The owner or superuser has to add the oracle address to the contract `addOracle(_oracleAddress)`.
 
 ## Technlogy
 
@@ -36,3 +39,4 @@ balance to it.
 ## Open Todos
 
  * Graph of the ethereum price combined with the Betting and Oracle events.
+ * Allow a consensus of multiple oracles.
