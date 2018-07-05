@@ -27,7 +27,7 @@ balance to it.
 * Oracle: `./gradlew :casino-oracle:bootRun`. Its actions can be watched on stdout.
 * Web: `/gradlew :casino-web:run`. It will be available on http://localhost:3000.
 
-Be aware that you may have to set the oracle/contract addresses in `application.yml`.
+Be aware that you have to set the oracle/contract addresses in `application.yml`.
 The owner or superuser has to add the oracle address to the contract `addOracle(_oracleAddress)`.
 
 ## Technlogy
@@ -40,3 +40,11 @@ The owner or superuser has to add the oracle address to the contract `addOracle(
 
  * Graph of the ethereum price combined with the Betting and Oracle events.
  * Allow a consensus of multiple oracles.
+
+## Final todo notes
+
+Sadly, the payout method always reverts and we couldn't find the issue in the given time. Please imagine the working
+payout :)
+
+PS: Thanks for the awesome workshops and insights! The exercises - sometimes easy to solve, sometimes hard to crack
+ - were a lot of fun despite the horrifying Javascript.
