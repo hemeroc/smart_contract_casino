@@ -163,6 +163,14 @@ contract Casino is Superuser, ERC223Receiver {
 
     // Oracle
 
+    function addOracle(address _oracleAddress) external onlyOwnerOrSuperuser {
+        addRole(_oracleAddress, ROLE_ORACLE);
+    }
+
+    function removeOracle(address _oracleAddress) external onlyOwnerOrSuperuser {
+        removeRole(_oracleAddress, ROLE_ORACLE);
+    }
+
     function setInformation(uint256 _timestamp, uint _price) external onlyOracle {
         uint currentPriceInformation = priceInformation[_timestamp];
         if (currentPriceInformation != 0) {
