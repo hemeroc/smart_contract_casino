@@ -9,6 +9,7 @@ import Button from "@material-ui/core/Button/Button";
 import casinoTokenDefinition from './abi/CasinoToken.json';
 import casinoDefinition from './abi/Casino.json';
 import {sameAddress} from "./helpers";
+import Divider from "@material-ui/core/Divider/Divider";
 
 export default class TokenCard extends Component {
 
@@ -46,6 +47,25 @@ export default class TokenCard extends Component {
     }
 
     render() {
+        if (this.props.casinoAddress === "" || this.props.account === "") return (
+            <Card>
+                <CardContent>
+                    <Typography variant="headline" component="h3">
+                        Token Exchange
+                    </Typography>
+                    <Typography component="p">
+                        Here you can exchange your hardly earned ether to casino tokens and back.
+                    </Typography>
+
+                    <Divider/>
+
+                    <Typography>
+                        Please configure a casino address and choose an account.
+                    </Typography>
+                </CardContent>
+            </Card>
+        );
+
         return (
             <Card>
                 <CardContent>
