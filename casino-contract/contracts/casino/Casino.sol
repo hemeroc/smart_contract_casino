@@ -22,6 +22,14 @@ contract Casino is Superuser, ERC223Receiver {
 
     mapping(address => uint) tokenBalance;
     mapping(uint256 => uint) priceInformation;
+    mapping(address => Bet[]) bets;
+
+    struct Bet {
+        uint256 amount;
+        uint256 betPlacedTimestamp;
+        uint256 betTimestamp;
+        bool rise;
+    }
 
     constructor(uint256 _initialCasinoTokenPrice) public {
         require(_initialCasinoTokenPrice > 0);
@@ -37,9 +45,10 @@ contract Casino is Superuser, ERC223Receiver {
     event TokenSold(address _address, uint _amount);
     event TokenAdded(address _address, uint _oldTokenBalance, uint _newTokenBalance);
 
-    event BetPlaced(address _address, uint256 _betPlacedTimestamp, uint256 _betTimestamp, bool _rise);
-    event BetLost(address _address, uint256 _betPlacedTimestamp, uint _initialPrice, uint256 _betTimestamp, uint _finalPrice);
-    event BetWon(address _address, uint256 _betPlacedTimestamp, uint _initialPrice, uint256 _betTimestamp, uint _finalPrice);
+    event BetPlaced(address _address, uint256 amount, uint256 _betPlacedTimestamp, uint256 _betTimestamp, bool _rise);
+    event BetLost(address _address, uint256 amount, uint256 _betPlacedTimestamp, uint _initialPrice, uint256 _betTimestamp, uint _finalPrice);
+    event BetWon(address _address, uint256 amount, uint256 _betPlacedTimestamp, uint _initialPrice, uint256 _betTimestamp, uint _finalPrice);
+    event BetRefunded(address _address, uint256 amount, uint256 _betPlacedTimestamp, uint _initialPrice, uint256 _betTimestamp, uint _finalPrice);
 
     // Casino Token
 
@@ -102,15 +111,48 @@ contract Casino is Superuser, ERC223Receiver {
         tokenBalance[msg.sender] = tokenBalance[msg.sender].sub(_amount);
         require(tokenBalance[msg.sender] >= 0);
         uint _betTimestamp = block.timestamp + BET_TIMESTAMP_IN_FUTURE;
-        // TODO: store bet placement
-        emit BetPlaced(msg.sender, block.timestamp, _betTimestamp, _rise);
+        bets[msg.sender].push(Bet(_amount, block.timestamp, _betTimestamp, _rise));
+        emit BetPlaced(msg.sender, _amount, block.timestamp, _betTimestamp, _rise);
     }
 
     function closeFinishedBets() external {
-        // TODO: close all finished bets of the user
-        // TODO: close all overdue bets
-        // TODO: transfer resulting tokens to user
-        // TODO: emit BetLost and/or BetWon
+        Bet[] storage senderBets = bets[msg.sender];
+        for (uint i = 0; i < senderBets.length; i++) {
+            Bet storage bet = senderBets[i];
+            if (bet.betTimestamp >= block.timestamp) {
+                continue;
+            }
+            if (priceInformation[bet.betPlacedTimestamp] != 0 && priceInformation[bet.betTimestamp] != 0) {
+                if ((priceInformation[bet.betPlacedTimestamp] < priceInformation[bet.betTimestamp] && bet.rise) ||
+                    (priceInformation[bet.betPlacedTimestamp] > priceInformation[bet.betTimestamp] && !bet.rise)) {
+                    uint256 wonTokens = bet.amount.mul(9).div(5);
+                    tokenBalance[msg.sender].add(wonTokens);
+                    emit BetWon(msg.sender, wonTokens,
+                        bet.betPlacedTimestamp, priceInformation[bet.betPlacedTimestamp],
+                        bet.betTimestamp, priceInformation[bet.betTimestamp]);
+                } else {
+                    emit BetLost(msg.sender, bet.amount,
+                        bet.betPlacedTimestamp, priceInformation[bet.betPlacedTimestamp],
+                        bet.betTimestamp, priceInformation[bet.betTimestamp]);
+                }
+                senderBets[i] = senderBets[senderBets.length - 1];
+                senderBets.length--;
+                i--;
+                continue;
+            } else if (bet.betTimestamp >= block.timestamp + BET_TIMESTAMP_IN_FUTURE) {
+                tokenBalance[msg.sender].add(bet.amount);
+                emit BetRefunded(msg.sender, bet.amount,
+                    bet.betPlacedTimestamp, priceInformation[bet.betPlacedTimestamp],
+                    bet.betTimestamp, priceInformation[bet.betTimestamp]);
+                senderBets[i] = senderBets[senderBets.length - 1];
+                senderBets.length--;
+                i--;
+                continue;
+            }
+        }
+        uint tokensToTransfer = tokenBalance[msg.sender];
+        tokenBalance[msg.sender] = 0;
+        casinoTokenContract.transfer(msg.sender, tokensToTransfer, "Thanks for playing 🍀");
     }
 
     // Payout
